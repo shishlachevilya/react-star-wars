@@ -1,13 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Header from '../Header';
 import RandomPlanet from '../RandomPlanet';
+import ListItem from '../ListItem';
+import PersonDetails from '../PersonDetails'
 
-class App extends Component {
+import './App.css';
+
+class App extends React.Component {
+
+  state = {
+    selectedPerson: 2
+  };
+
+  onPersonSelected = ( id ) => {
+    this.setState({
+      selectedPerson: id
+    });
+  };
+
   render() {
     return (
-      <div>
+      <div className="container">
         <Header/>
         <RandomPlanet/>
+
+        <div className="row mb2">
+          <div className="col-md-6">
+            <ListItem onPersonSelected={ this.onPersonSelected }/>
+          </div>
+          <div className="col-md-6">
+            <PersonDetails personId={ this.state.selectedPerson }/>
+          </div>
+        </div>
       </div>
     );
   }
