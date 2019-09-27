@@ -8,7 +8,7 @@ class PersonDetails extends React.Component {
   swapiServese = new SwapiService();
 
   state = {
-    person: {}
+    person: null
   };
 
   componentDidMount() {
@@ -30,7 +30,11 @@ class PersonDetails extends React.Component {
       });
   };
 
+
+
   render() {
+
+    console.log(this.state.person);
     if(!this.state.person) {
       return <span>Select a person from list</span>
     }
