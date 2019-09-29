@@ -9,7 +9,7 @@ import './App.css';
 class App extends React.Component {
 
   state = {
-    selectedPerson: 4
+    selectedPerson: 1
   };
 
   onPersonSelected = ( id ) => {

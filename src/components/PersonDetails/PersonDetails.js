@@ -1,19 +1,43 @@
-import React from 'react';
-
-import './PersonDetails.css';
+import React, { Fragment } from 'react';
+import Spinner from '../Spinner';
+import ErrorMessage from '../ErrorMessage';
 import SwapiService from '../../services/swapi-service';
 
-class PersonDetails extends React.Component {
+import './PersonDetails.css';
+
+export default class PersonDetails extends React.Component {
 
   swapiServese = new SwapiService();
 
   state = {
-    person: null
+    person: null,
+    loading: true,
+    error: false
   };
 
   componentDidMount() {
     this.updatePerson();
   }
+
+  componentDidUpdate(prevProps) {
+    if(this.props.personId !== prevProps.personId) {
+      this.updatePerson();
+    }
+  }
+
+  onPersonLoaded = (person) => {
+    this.setState({
+      person: person,
+      loading: false
+    });
+  };
+
+  onError = () => {
+    this.setState({
+      loading: false,
+      error: true
+    });
+  };
 
   updatePerson() {
     const { personId } = this.props;
@@ -23,50 +47,54 @@ class PersonDetails extends React.Component {
     }
 
     this.swapiServese.getPerson(personId)
-      .then(( person ) => {
-        this.setState({
-          person: person
-        });
-      });
+      .then(this.onPersonLoaded)
+      .catch(this.onError);
   };
 
-
-
   render() {
-
-    console.log(this.state.person);
     if(!this.state.person) {
       return <span>Select a person from list</span>
     }
 
-    const { id, name, gender, birth_year, eye_color } = this.state.person;
+    const { person, loading, error } = this.state;
+
+    const hasData = !(loading || error);
 
     return (
       <div className="person-details card">
-        <img className="person-image"
-             src={ `https://starwars-visualguide.com/assets/img/characters/${id}.jpg` }
-        />
-
-        <div className="card-body">
-          <h4>{ name }</h4>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <span className="term">Gender</span>
-              <span>{ gender }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Birth Year</span>
-              <span>{ birth_year }</span>
-            </li>
-            <li className="list-group-item">
-              <span className="term">Eye Color</span>
-              <span>{ eye_color }</span>
-            </li>
-          </ul>
-        </div>
+        { error && <ErrorMessage/> }
+        { loading && <Spinner/> }
+        { hasData && <PersonView person={ person }/> }
       </div>
     );
   }
 }
 
-export default PersonDetails;
+const PersonView = ({ person: { id, name, gender, birthYear, eyeColor } }) => {
+  return (
+    <Fragment>
+      <img className="person-image"
+           src={ `https://starwars-visualguide.com/assets/img/characters/${ id }.jpg` }
+           alt={ name }
+      />
+
+      <div className="card-body">
+        <h4>{ name }</h4>
+        <ul className="list-group list-group-flush">
+          <li className="list-group-item">
+            <span className="term">Gender</span>
+            <span>{ gender }</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Birth Year</span>
+            <span>{ birthYear }</span>
+          </li>
+          <li className="list-group-item">
+            <span className="term">Eye Color</span>
+            <span>{ eyeColor }</span>
+          </li>
+        </ul>
+      </div>
+    </Fragment>
+  )
+};

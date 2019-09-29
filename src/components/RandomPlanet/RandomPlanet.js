@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import SwapiService from '../../services/swapi-service';
 import Spinner from '../Spinner';
 import ErrorMessage from '../ErrorMessage';
@@ -21,7 +21,7 @@ export default class RandomPlanet extends React.Component {
     setInterval(this.updatePlanet, 5000);
   }
 
-  onPlanetLoaded = ( planet ) => {
+  onPlanetLoaded = (planet) => {
     this.setState({
       planet: planet,
       loading: false
@@ -59,12 +59,13 @@ export default class RandomPlanet extends React.Component {
 }
 
 
-const PlanetView = ( { planet: { id, name, population, rotationPeriod, diameter } } ) => {
+const PlanetView = ({ planet: { id, name, population, rotationPeriod, diameter } }) => {
 
   return (
-    <React.Fragment>
+    <Fragment>
       <img className="planet-image"
            src={ `https://starwars-visualguide.com/assets/img/planets/${ id }.jpg` }
+           alt={ name }
       />
 
       <div>
@@ -84,6 +85,6 @@ const PlanetView = ( { planet: { id, name, population, rotationPeriod, diameter 
           </li>
         </ul>
       </div>
-    </React.Fragment>
+    </Fragment>
   )
 };
