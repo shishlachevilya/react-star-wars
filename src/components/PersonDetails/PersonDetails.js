@@ -19,13 +19,13 @@ export default class PersonDetails extends React.Component {
     this.updatePerson();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate( prevProps ) {
     if(this.props.personId !== prevProps.personId) {
       this.updatePerson();
     }
   }
 
-  onPersonLoaded = (person) => {
+  onPersonLoaded = ( person ) => {
     this.setState({
       person: person,
       loading: false
@@ -53,7 +53,7 @@ export default class PersonDetails extends React.Component {
 
   render() {
     if(!this.state.person) {
-      return <span>Select a person from list</span>
+      return <Spinner/>
     }
 
     const { person, loading, error } = this.state;
@@ -70,7 +70,7 @@ export default class PersonDetails extends React.Component {
   }
 }
 
-const PersonView = ({ person: { id, name, gender, birthYear, eyeColor } }) => {
+const PersonView = ( { person: { id, name, gender, birthYear, eyeColor } } ) => {
   return (
     <Fragment>
       <img className="person-image"
